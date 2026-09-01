@@ -1,0 +1,107 @@
+/**
+ * DevPulse - Design Tokens & System Variables
+ *
+ * Defines CSS custom properties used across the application.
+ * Values adhere to the calm, low-saturation developer tool aesthetic.
+ */
+
+:root,
+html[data-theme="dark"] {
+  /* Dark Theme Palette (Default) */
+  --bg: #15171A;
+  --surface: #1E2126;
+  --surface-hover: #262A30;
+  --border: #2C3036;
+  --accent: #C9954D;
+  --accent-hover: #D9A85E;
+  --accent-dark-text: #15171A;
+  --text-primary: #E4E6E9;
+  --text-secondary: #8B9099;
+  --success: #6B9080;
+  --error: #B4665A;
+  --info: #6E8CA0;
+
+  /* Typography */
+  --font-heading: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Corner Radii */
+  --radius-card: 14px;
+  --radius-input: 8px;
+  --radius-btn: 8px;
+  --radius-badge: 4px;
+
+  /* Spacing Scale (8px base unit) */
+  --space-05: 4px;
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-5: 40px;
+  --space-6: 48px;
+
+  /* Card Padding Token */
+  --card-padding: var(--space-4);
+
+  /* Elevation & Shadows */
+  --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.3);
+  --shadow-input-focus: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent);
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s ease;
+}
+
+/* Light Theme Variant Tokens - Layered Premium SaaS Aesthetic */
+:root[data-theme="light"],
+html[data-theme="light"] {
+  --bg: #F3F4F6;
+  --bg-main: #F3F4F6;
+  --bg-sidebar: #F8F9FA;
+  --bg-card: #FFFFFF;
+  --surface: #FFFFFF;
+  --surface-hover: #F8F9FA;
+  --border: #E5E7EB;
+  --accent: #3F6B52;
+  --accent-hover: #345A44;
+  --accent-dark-text: #FFFFFF;
+  --text-primary: #1F2937;
+  --text-secondary: #6B7280;
+  --success: #4F8067;
+  --error: #B25A4D;
+  --info: #5C7A70;
+  --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+}
+
+/* ==========================================
+   Modern Custom Scrollbars (Global)
+   ========================================== */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+@media (max-width: 600px) {
+  :root {
+    --card-padding: var(--space-3);
+  }
+}

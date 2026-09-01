@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="DevPulse - Quick 3-step workspace setup and onboarding for developers.">
+  <title>DevPulse — Setup Your Workspace</title>
+
+  <!-- Google Fonts: Space Grotesk, Inter, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Design System & Onboarding Stylesheets -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/auth.css">
+  <link rel="stylesheet" href="css/onboarding.css">
+
+  <!-- External Library CDN (GSAP 3.12.5) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+</head>
+<body>
+  <main class="onboarding-wrapper">
+    
+    <!-- Central Onboarding Card Container -->
+    <div class="onboarding-card" id="onboardingCard">
+      
+      <!-- Top Progress Indicator Header (Persistent across all 3 steps) -->
+      <header class="onboarding-progress-header" aria-label="Step 1 of 3">
+        <div class="progress-meta">
+          <span class="progress-step-text" id="progressStepLabel">Step 1 of 3</span>
+        </div>
+        <div class="progress-bars-container" aria-hidden="true">
+          <span class="progress-bar-segment active"></span>
+          <span class="progress-bar-segment"></span>
+          <span class="progress-bar-segment"></span>
+        </div>
+      </header>
+
+      <!-- Step Views Wrapper -->
+      <div class="step-views-wrapper">
+        
+        <!-- STEP 1: GitHub Username -->
+        <div id="stepView1" class="step-section">
+          <h1 class="step-title">Connect your GitHub</h1>
+          <p class="step-subtitle">We'll pull your live stats onto your dashboard</p>
+
+          <div class="github-input-wrapper">
+            <span class="github-icon-prefix" aria-hidden="true">
+              <!-- Inline GitHub SVG Icon -->
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+              </svg>
+            </span>
+            <label for="githubUsername" class="form-label" style="position:absolute; width:1px; height:1px; overflow:hidden;">GitHub Username</label>
+            <input 
+              type="text" 
+              id="githubUsername" 
+              name="githubUsername" 
+              class="form-input has-prefix" 
+              placeholder="your-username" 
+              autocomplete="off"
+            >
+          </div>
+
+          <div class="onboarding-actions">
+            <button type="button" id="step1ContinueBtn" class="btn-primary">Continue</button>
+            <div class="secondary-actions-row">
+              <button type="button" id="step1SkipBtn" class="step-skip-btn">Skip for now</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 2: Primary Focus Option Cards -->
+        <div id="stepView2" class="step-section hidden">
+          <h2 class="step-title">What's your primary focus right now?</h2>
+          <p class="step-subtitle">Select one option to customize your workspace</p>
+
+          <div class="focus-options-grid" role="radiogroup" aria-label="Primary focus">
+            
+            <!-- Frontend Option -->
+            <button type="button" class="focus-card-btn" data-value="Frontend" role="radio" aria-checked="false">
+              <svg class="focus-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                <line x1="8" y1="21" x2="16" y2="21"/>
+                <line x1="12" y1="17" x2="12" y2="21"/>
+              </svg>
+              <span class="focus-label">Frontend</span>
+            </button>
+
+            <!-- Backend Option -->
+            <button type="button" class="focus-card-btn" data-value="Backend" role="radio" aria-checked="false">
+              <svg class="focus-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="2" width="20" height="8" rx="2" ry="2"/>
+                <rect x="2" y="14" width="20" height="8" rx="2" ry="2"/>
+                <line x1="6" y1="6" x2="6.01" y2="6"/>
+                <line x1="6" y1="18" x2="6.01" y2="18"/>
+              </svg>
+              <span class="focus-label">Backend</span>
+            </button>
+
+            <!-- Design Option -->
+            <button type="button" class="focus-card-btn" data-value="Design" role="radio" aria-checked="false">
+              <svg class="focus-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 19l7-7 3 3-7 7-3-3z"/>
+                <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/>
+                <path d="M2 2l7.586 7.586"/>
+                <circle cx="11" cy="11" r="2"/>
+              </svg>
+              <span class="focus-label">Design</span>
+            </button>
+
+          </div>
+
+          <div class="onboarding-actions">
+            <button type="button" id="step2ContinueBtn" class="btn-primary" disabled>Continue</button>
+            <div class="secondary-actions-row">
+              <button type="button" id="step2BackBtn" class="step-back-btn">Back</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 3: Theme Preference Cards -->
+        <div id="stepView3" class="step-section hidden">
+          <h2 class="step-title">Pick your mode</h2>
+          <p class="step-subtitle">Choose your visual theme preference</p>
+
+          <div class="theme-options-grid" role="radiogroup" aria-label="Theme preference">
+            
+            <!-- Dark Mode Option -->
+            <button type="button" class="theme-card-btn" data-value="Dark Mode" role="radio" aria-checked="false">
+              <span class="theme-badge" aria-hidden="true">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              </span>
+              
+              <!-- Dark Mode CSS-Only Mini Mock Thumbnail -->
+              <div class="mini-dashboard-preview dark" aria-hidden="true">
+                <div class="mini-header"></div>
+                <div class="mini-body-row">
+                  <div class="mini-box-1"></div>
+                  <div class="mini-box-2"></div>
+                </div>
+              </div>
+
+              <span class="theme-card-label">Dark Mode</span>
+            </button>
+
+            <!-- Light Mode Option -->
+            <button type="button" class="theme-card-btn" data-value="Light Mode" role="radio" aria-checked="false">
+              <span class="theme-badge" aria-hidden="true">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              </span>
+
+              <!-- Light Mode CSS-Only Mini Mock Thumbnail -->
+              <div class="mini-dashboard-preview light" aria-hidden="true">
+                <div class="mini-header"></div>
+                <div class="mini-body-row">
+                  <div class="mini-box-1"></div>
+                  <div class="mini-box-2"></div>
+                </div>
+              </div>
+
+              <span class="theme-card-label">Light Mode</span>
+            </button>
+
+          </div>
+
+          <div class="onboarding-actions">
+            <button type="button" id="finishSetupBtn" class="btn-primary" disabled>Finish Setup</button>
+            <div class="secondary-actions-row">
+              <button type="button" id="step3BackBtn" class="step-back-btn">Back</button>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /step-views-wrapper -->
+
+    </div><!-- /onboarding-card -->
+
+  </main>
+
+  <!-- Application Main Entry Script (ES6 Module) -->
+  <script type="module" src="js/main-onboarding.js"></script>
+</body>
+</html>

@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="DevPulse - Production-ready client-side Single Page Application developer productivity dashboard.">
+  <title>DevPulse — Developer Productivity Dashboard</title>
+
+  <!-- Google Fonts: Space Grotesk, Inter, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Design Tokens & Dashboard Stylesheets -->
+  <link rel="stylesheet" href="css/variables.css?v=1.0.4">
+  <link rel="stylesheet" href="css/dashboard.css?v=1.0.4">
+
+  <!-- External Library CDN (GSAP 3.12.5) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+</head>
+<body>
+  <!-- Fixed 100vh Layout Container -->
+  <div class="dashboard-container">
+    
+    <!-- Top Header Bar -->
+    <header class="dashboard-header">
+      <div class="header-greeting">
+        <h1 class="greeting-text" id="headerGreetingText">Good morning, Developer</h1>
+        <span class="greeting-date" id="headerGreetingDate">Loading date...</span>
+      </div>
+
+      <div class="header-actions">
+        <div class="live-clock" id="liveClockText">00:00:00</div>
+        <button type="button" class="icon-btn-ghost" id="headerProfileBtn" aria-label="User Profile & Settings" title="Account Settings" style="position: relative; width: 30px; height: 30px; padding: 0; border-radius: 50%; overflow: hidden; background: var(--surface-hover); border: 1px solid var(--accent); display: flex; align-items: center; justify-content: center;">
+          <div id="headerUserAvatarInitials" style="font-size: 11px; font-weight: 700; color: var(--accent);">DP</div>
+          <img id="headerUserAvatarImg" src="" alt="Profile Avatar" style="display: none; width: 100%; height: 100%; object-fit: cover;">
+        </button>
+        <button type="button" class="icon-btn-ghost" id="headerThemeToggleBtn" aria-label="Toggle dark and light theme" title="Toggle Theme">
+          <span id="headerThemeToggleIcon">☀️</span>
+        </button>
+        <button type="button" class="icon-btn-ghost" id="settingsBellBtn" aria-label="Open posture & health reminder settings" title="Health Reminders">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Sidebar (Left 220px) -->
+    <aside class="dashboard-sidebar">
+      <div class="sidebar-top">
+        <div class="sidebar-brand">
+          <div class="brand-icon" style="width: 28px; height: 28px;" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+            </svg>
+          </div>
+          <span class="brand-name" style="font-size: 18px;">DevPulse</span>
+        </div>
+
+        <nav class="sidebar-nav" aria-label="Developer Tools & Reference">
+          <button type="button" class="nav-item" data-action="cheatsheets" title="Developer Cheat Sheets & Reference">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            <span>Cheat Sheets</span>
+          </button>
+          <button type="button" class="nav-item" data-action="stopwatch" id="stopwatchNavItem" title="Sprint Session Stopwatch">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span id="stopwatchNavText">Sprint Timer</span>
+          </button>
+          <button type="button" class="nav-item" data-action="profile" title="User Profile & Account Settings">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span>Profile</span>
+          </button>
+          <button type="button" class="nav-item" data-action="settings" id="sidebarSettingsLink" title="Health Reminders & Settings">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            <span>Settings</span>
+          </button>
+        </nav>
+      </div>
+
+      <div class="sidebar-footer">
+        <!-- Live Sprint Stopwatch Widget Badge (When Active) -->
+        <div id="sidebarStopwatchWidget" style="display: none; background: rgba(37, 99, 235, 0.15); border: 1px solid rgba(37, 99, 235, 0.3); border-radius: 8px; padding: 6px 10px; margin-bottom: 8px; font-size: 11px; text-align: center;">
+          <div style="font-weight: 600; color: var(--accent);">⏱️ Coding Sprint</div>
+          <div id="sidebarStopwatchTime" style="font-size: 15px; font-family: var(--font-mono); font-weight: 700; margin: 2px 0;">00:00:00</div>
+          <div style="display: flex; gap: 4px; justify-content: center;">
+            <button type="button" id="stopwatchToggleBtn" style="font-size: 10px; padding: 2px 8px; background: var(--accent); color: white; border: none; border-radius: 4px; cursor: pointer;">Pause</button>
+            <button type="button" id="stopwatchResetBtn" style="font-size: 10px; padding: 2px 8px; background: var(--bg); border: 1px solid var(--border); color: var(--text-primary); border-radius: 4px; cursor: pointer;">Reset</button>
+          </div>
+        </div>
+
+        <div class="sidebar-footer-row">
+          <div class="user-profile-badge">
+            <div class="user-avatar" id="userAvatarInitials">DP</div>
+            <div class="user-info">
+              <span class="user-name" id="sidebarUserName">Developer</span>
+              <span class="user-role" id="sidebarUserRole">Fullstack</span>
+            </div>
+          </div>
+          <button type="button" class="icon-btn-ghost" id="logoutBtn" aria-label="Log out of DevPulse" title="Log Out" style="width: 32px; height: 32px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="dashboard-main" id="dashboardMain">
+      
+      <!-- Priority 1 Row: Pomodoro Timer & Kanban Board -->
+      <div class="dashboard-row">
+        <div id="pomodoroWidgetContainer"></div>
+        <div id="kanbanWidgetContainer" style="flex: 1; min-width: 0;"></div>
+      </div>
+
+      <!-- Priority 2 Row: GitHub Stats & Snippet Vault -->
+      <div class="dashboard-row">
+        <div id="githubWidgetContainer" style="flex: 1; min-width: 0;"></div>
+        <div id="snippetsWidgetContainer" style="flex: 1; min-width: 0;"></div>
+      </div>
+
+    </main>
+
+    <!-- Right Rail (320px): Rubber Duck AI -->
+    <aside class="dashboard-rail">
+      <div id="aiAssistantWidgetContainer"></div>
+    </aside>
+
+    <!-- Health & Posture Reminder Settings Popover -->
+    <div class="settings-popover" id="settingsPopover" role="dialog" aria-labelledby="popoverTitle">
+      <div class="popover-header">
+        <h3 class="popover-title" id="popoverTitle">Health Reminders</h3>
+        <button type="button" class="icon-btn-ghost" id="closeSettingsBtn" style="width: 28px; height: 28px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div class="toggle-switch-wrapper">
+        <span style="font-size: 13px; font-weight: 500;">Enable reminders</span>
+        <input type="checkbox" id="reminderToggle" class="switch-input">
+      </div>
+
+      <div class="form-group">
+        <label for="reminderIntervalSelect" class="form-label">Remind me every</label>
+        <select id="reminderIntervalSelect" class="form-input">
+          <option value="30">30 minutes</option>
+          <option value="60" selected>60 minutes</option>
+          <option value="90">90 minutes</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="reminderMessageInput" class="form-label">Custom Message</label>
+        <input type="text" id="reminderMessageInput" class="form-input" value="Time to stretch and drink some water!">
+      </div>
+
+      <div style="border-top: 1px solid var(--border); margin: 12px 0 10px 0; padding-top: 10px;">
+        <span style="font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); display: block; margin-bottom: 8px;">Widget Visibility</span>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 12px;">
+          <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+            <input type="checkbox" id="toggleWidgetTasks" checked> Tasks Board
+          </label>
+          <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+            <input type="checkbox" id="toggleWidgetPomodoro" checked> Pomodoro Timer
+          </label>
+          <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+            <input type="checkbox" id="toggleWidgetGithub" checked> GitHub Stats
+          </label>
+          <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+            <input type="checkbox" id="toggleWidgetAi" checked> AI Assistant
+          </label>
+        </div>
+      </div>
+      <button type="button" class="btn-primary" id="saveSettingsBtn" style="height: 36px; font-size: 13px; margin-top: 6px;">Save Preferences</button>
+    </div>
+
+    <!-- User Profile & Account Settings Modal -->
+    <div class="settings-popover profile-modal" id="profileModal" role="dialog" aria-labelledby="profileModalTitle">
+      <div class="popover-header">
+        <h3 class="popover-title" id="profileModalTitle">Account Settings</h3>
+        <button type="button" class="icon-btn-ghost" id="closeProfileModalBtn" style="width: 28px; height: 28px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; margin: 12px 0;">
+        <div class="modal-avatar-preview-container" style="position: relative; width: 72px; height: 72px; border-radius: 50%; overflow: hidden; background: var(--surface-hover); border: 2px solid var(--accent); display: flex; align-items: center; justify-content: center;">
+          <div id="modalUserAvatarInitials" style="font-size: 24px; font-weight: 700; color: var(--accent);">DP</div>
+          <img id="modalUserAvatarImg" src="" alt="Profile Avatar" style="display: none; width: 100%; height: 100%; object-fit: cover;">
+        </div>
+
+        <div>
+          <h4 id="modalUserName" style="font-size: 15px; font-weight: 600; margin: 0; color: var(--text-primary);">Developer</h4>
+          <span id="modalUserEmail" style="font-size: 12px; color: var(--text-secondary);">user@devpulse.com</span>
+        </div>
+
+        <div style="display: flex; gap: 8px; margin-top: 6px; width: 100%;">
+          <label class="btn-primary" style="flex: 1; height: 32px; font-size: 11px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer;">
+            📷 Upload Photo
+            <input type="file" id="profileImageInput" accept="image/*" style="display: none;">
+          </label>
+          <button type="button" class="widget-action-btn" id="removeAvatarBtn" style="flex: 1; height: 32px; font-size: 11px; justify-content: center;">
+            Remove Photo
+          </button>
+        </div>
+      </div>
+
+      <div style="border-top: 1px solid var(--border); margin: 14px 0 10px 0; padding-top: 10px;">
+        <span style="font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--error); display: block; margin-bottom: 6px;">Danger Zone</span>
+        <button type="button" class="btn-danger" id="deleteAccountBtn" style="width: 100%; height: 34px; font-size: 12px; background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;">
+          🗑️ Delete Account
+        </button>
+      </div>
+    </div>
+
+    <!-- Developer Cheat Sheets & Reference Modal -->
+    <div class="settings-popover cheat-sheets-modal" id="cheatSheetsModal" role="dialog" aria-labelledby="cheatModalTitle" style="max-width: 480px; width: 92vw;">
+      <div class="popover-header" style="display: flex; justify-content: space-between; align-items: center;">
+        <h3 class="popover-title" id="cheatModalTitle">Developer Cheat Sheets</h3>
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <button type="button" class="widget-action-btn" id="refreshCheatSheetsBtn" style="height: 26px; padding: 0 8px; font-size: 11px;">🔄 Refresh</button>
+          <button type="button" class="icon-btn-ghost" id="closeCheatModalBtn" style="width: 28px; height: 28px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Tab Navigation Header -->
+      <div class="cheat-tabs-header" style="display: flex; gap: 6px; border-bottom: 1px solid var(--border); padding-bottom: 8px; margin-top: 8px;">
+        <button type="button" class="cheat-tab active" data-tab="git" style="padding: 4px 10px; font-size: 11px; border-radius: 6px; border: 1px solid var(--border); background: var(--surface-hover); color: var(--accent); cursor: pointer; font-weight: 600;">🐙 Git</button>
+        <button type="button" class="cheat-tab" data-tab="http" style="padding: 4px 10px; font-size: 11px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg); color: var(--text-secondary); cursor: pointer; font-weight: 600;">🌐 HTTP</button>
+        <button type="button" class="cheat-tab" data-tab="regex" style="padding: 4px 10px; font-size: 11px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg); color: var(--text-secondary); cursor: pointer; font-weight: 600;">🔍 Regex</button>
+        <button type="button" class="cheat-tab" data-tab="css" style="padding: 4px 10px; font-size: 11px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg); color: var(--text-secondary); cursor: pointer; font-weight: 600;">🎨 CSS</button>
+      </div>
+
+      <!-- Tab Contents Area -->
+      <div class="cheat-tab-contents" style="max-height: 280px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
+        <!-- Git Tab -->
+        <div class="cheat-panel" id="cheatPanelGit" style="display: flex; flex-direction: column; gap: 6px;">
+          <div class="cheat-code-card" style="display: flex; justify-content: space-between; align-items: center; background: var(--bg); padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border);">
+            <div><strong style="font-size: 11px; color: var(--accent);">Stash Uncommitted:</strong> <code style="font-size: 11px;">git stash push -m "wip"</code></div>
+            <button type="button" class="copy-cmd-btn" data-cmd="git stash push -m &quot;wip&quot;" style="font-size: 10px; padding: 2px 6px; background: rgba(255,255,255,0.1); border: 1px solid var(--border); color: var(--text-primary); border-radius: 4px; cursor: pointer;">Copy</button>
+          </div>
+          <div class="cheat-code-card" style="display: flex; justify-content: space-between; align-items: center; background: var(--bg); padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border);">
+            <div><strong style="font-size: 11px; color: var(--accent);">Interactive Rebase:</strong> <code style="font-size: 11px;">git rebase -i HEAD~3</code></div>
+            <button type="button" class="copy-cmd-btn" data-cmd="git rebase -i HEAD~3" style="font-size: 10px; padding: 2px 6px; background: rgba(255,255,255,0.1); border: 1px solid var(--border); color: var(--text-primary); border-radius: 4px; cursor: pointer;">Copy</button>
+          </div>
+          <div class="cheat-code-card" style="display: flex; justify-content: space-between; align-items: center; background: var(--bg); padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border);">
+            <div><strong style="font-size: 11px; color: var(--accent);">Soft Undo Commit:</strong> <code style="font-size: 11px;">git reset --soft HEAD~1</code></div>
+            <button type="button" class="copy-cmd-btn" data-cmd="git reset --soft HEAD~1" style="font-size: 10px; padding: 2px 6px; background: rgba(255,255,255,0.1); border: 1px solid var(--border); color: var(--text-primary); border-radius: 4px; cursor: pointer;">Copy</button>
+          </div>
+          <div class="cheat-code-card" style="display: flex; justify-content: space-between; align-items: center; background: var(--bg); padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border);">
+            <div><strong style="font-size: 11px; color: var(--accent);">Cherry Pick:</strong> <code style="font-size: 11px;">git cherry-pick &lt;commit-hash&gt;</code></div>
+            <button type="button" class="copy-cmd-btn" data-cmd="git cherry-pick <commit-hash>" style="font-size: 10px; padding: 2px 6px; background: rgba(255,255,255,0.1); border: 1px solid var(--border); color: var(--text-primary); border-radius: 4px; cursor: pointer;">Copy</button>
+          </div>
+        </div>
+
+        <!-- HTTP Tab -->
+        <div class="cheat-panel" id="cheatPanelHttp" style="display: none; flex-direction: column; gap: 6px;">
+          <div style="font-size: 11px; padding: 6px; background: var(--bg); border-radius: 6px;">🟢 <strong>200 OK</strong> — Request succeeded</div>
+          <div style="font-size: 11px; padding: 6px; background: var(--bg); border-radius: 6px;">🟢 <strong>201 Created</strong> — Resource successfully created</div>
+          <div style="font-size: 11px; padding: 6px; background: var(--bg); border-radius: 6px;">🟡 <strong>400 Bad Request</strong> — Invalid request payload / syntax</div>
+          <div style="font-size: 11px; padding: 6px; background: var(--bg); border-radius: 6px;">🟡 <strong>401 Unauthorized</strong> — Authentication missing / token invalid</div>
+          <div style="font-size: 11px; padding: 6px; background: var(--bg); border-radius: 6px;">🟡 <strong>403 Forbidden</strong> — Credentials valid but access denied</div>
+          <div style="font-size: 11px; padding: 6px; background: var(--bg); border-radius: 6px;">🟡 <strong>404 Not Found</strong> — Resource endpoint does not exist</div>
+          <div style="font-size: 11px; padding: 6px; background: var(--bg); border-radius: 6px;">🔴 <strong>500 Server Error</strong> — Internal backend failure</div>
+        </div>
+
+        <!-- Regex Tab -->
+        <div class="cheat-panel" id="cheatPanelRegex" style="display: none; flex-direction: column; gap: 6px;">
+          <div class="cheat-code-card" style="display: flex; justify-content: space-between; align-items: center; background: var(--bg); padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border);">
+            <div><strong style="font-size: 11px; color: var(--accent);">Email Regex:</strong> <code style="font-size: 10px;">/^[^\s@]+@[^\s@]+\.[^\s@]+$/</code></div>
+            <button type="button" class="copy-cmd-btn" data-cmd="/^[^\s@]+@[^\s@]+\.[^\s@]+$/" style="font-size: 10px; padding: 2px 6px; background: rgba(255,255,255,0.1); border: 1px solid var(--border); color: var(--text-primary); border-radius: 4px; cursor: pointer;">Copy</button>
+          </div>
+          <div class="cheat-code-card" style="display: flex; justify-content: space-between; align-items: center; background: var(--bg); padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border);">
+            <div><strong style="font-size: 11px; color: var(--accent);">URL Regex:</strong> <code style="font-size: 10px;">/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}/</code></div>
+            <button type="button" class="copy-cmd-btn" data-cmd="/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}/" style="font-size: 10px; padding: 2px 6px; background: rgba(255,255,255,0.1); border: 1px solid var(--border); color: var(--text-primary); border-radius: 4px; cursor: pointer;">Copy</button>
+          </div>
+        </div>
+
+        <!-- CSS Tab -->
+        <div class="cheat-panel" id="cheatPanelCss" style="display: none; flex-direction: column; gap: 6px;">
+          <div style="font-size: 11px; padding: 6px; background: var(--bg); border-radius: 6px;"><code>display: flex; align-items: center; justify-content: center;</code></div>
+          <div style="font-size: 11px; padding: 6px; background: var(--bg); border-radius: 6px;"><code>display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));</code></div>
+          <div style="font-size: 11px; padding: 6px; background: var(--bg); border-radius: 6px;"><code>backdrop-filter: blur(16px); background: rgba(15, 23, 42, 0.75);</code></div>
+        </div>
+      </div>
+    </div>
+      </div>
+
+      <div class="sidebar-footer">
+        <!-- Sun/Moon Theme Toggle Switch -->
+        <button type="button" class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle dark and light theme">
+          <span id="themeToggleIcon">☀️</span>
+          <span id="themeToggleText">Light Mode</span>
+        </button>
+
+        <div class="sidebar-footer-row">
+          <div class="user-profile-badge">
+            <div class="user-avatar" id="userAvatarInitials">DP</div>
+            <div class="user-info">
+              <span class="user-name" id="sidebarUserName">Developer</span>
+              <span class="user-role" id="sidebarUserRole">Fullstack</span>
+            </div>
+          </div>
+          <button type="button" class="icon-btn-ghost" id="logoutBtn" aria-label="Log out of DevPulse" style="width: 32px; height: 32px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="dashboard-main" id="dashboardMain">
+      
+      <!-- Priority 1 Row: Pomodoro Timer & Kanban Board -->
+      <div class="dashboard-row">
+        <div id="pomodoroWidgetContainer"></div>
+        <div id="kanbanWidgetContainer" style="flex: 1; min-width: 0;"></div>
+      </div>
+
+      <!-- Priority 2 Row: GitHub Stats & Snippet Vault -->
+      <div class="dashboard-row">
+        <div id="githubWidgetContainer" style="flex: 1; min-width: 0;"></div>
+        <div id="snippetsWidgetContainer" style="flex: 1; min-width: 0;"></div>
+      </div>
+
+    </main>
+
+    <!-- Right Rail (320px): Rubber Duck AI -->
+    <aside class="dashboard-rail">
+      <div id="aiAssistantWidgetContainer"></div>
+    </aside>
+
+    <!-- Health & Posture Reminder Settings Popover -->
+    <div class="settings-popover" id="settingsPopover" role="dialog" aria-labelledby="popoverTitle">
+      <div class="popover-header">
+        <h3 class="popover-title" id="popoverTitle">Health Reminders</h3>
+        <button type="button" class="icon-btn-ghost" id="closeSettingsBtn" style="width: 28px; height: 28px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div class="toggle-switch-wrapper">
+        <span style="font-size: 13px; font-weight: 500;">Enable reminders</span>
+        <input type="checkbox" id="reminderToggle" class="switch-input">
+      </div>
+
+      <div class="form-group">
+        <label for="reminderIntervalSelect" class="form-label">Remind me every</label>
+        <select id="reminderIntervalSelect" class="form-input">
+          <option value="30">30 minutes</option>
+          <option value="60" selected>60 minutes</option>
+          <option value="90">90 minutes</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="reminderMessageInput" class="form-label">Custom Message</label>
+        <input type="text" id="reminderMessageInput" class="form-input" value="Time to stretch and drink some water!">
+      </div>
+
+      <div style="border-top: 1px solid var(--border); margin: 12px 0 10px 0; padding-top: 10px;">
+        <span style="font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); display: block; margin-bottom: 8px;">Widget Visibility</span>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 12px;">
+          <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+            <input type="checkbox" id="toggleWidgetTasks" checked> Tasks Board
+          </label>
+          <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+            <input type="checkbox" id="toggleWidgetPomodoro" checked> Pomodoro Timer
+          </label>
+          <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+            <input type="checkbox" id="toggleWidgetGithub" checked> GitHub Stats
+          </label>
+          <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+            <input type="checkbox" id="toggleWidgetAi" checked> AI Assistant
+          </label>
+        </div>
+      </div>
+
+      <button type="button" class="btn-primary" id="saveSettingsBtn" style="height: 36px; font-size: 13px; margin-top: 6px;">Save Preferences</button>
+    </div>
+
+    <!-- User Profile & Account Settings Modal -->
+    <div class="settings-popover profile-modal" id="profileModal" role="dialog" aria-labelledby="profileModalTitle">
+      <div class="popover-header">
+        <h3 class="popover-title" id="profileModalTitle">Account Settings</h3>
+        <button type="button" class="icon-btn-ghost" id="closeProfileModalBtn" style="width: 28px; height: 28px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; margin: 12px 0;">
+        <div class="modal-avatar-preview-container" style="position: relative; width: 72px; height: 72px; border-radius: 50%; overflow: hidden; background: var(--surface-hover); border: 2px solid var(--accent); display: flex; align-items: center; justify-content: center;">
+          <div id="modalUserAvatarInitials" style="font-size: 24px; font-weight: 700; color: var(--accent);">DP</div>
+          <img id="modalUserAvatarImg" src="" alt="Profile Avatar" style="display: none; width: 100%; height: 100%; object-fit: cover;">
+        </div>
+
+        <div>
+          <h4 id="modalUserName" style="font-size: 15px; font-weight: 600; margin: 0; color: var(--text-primary);">Developer</h4>
+          <span id="modalUserEmail" style="font-size: 12px; color: var(--text-secondary);">user@devpulse.com</span>
+        </div>
+
+        <div style="display: flex; gap: 8px; margin-top: 6px; width: 100%;">
+          <label class="btn-primary" style="flex: 1; height: 32px; font-size: 11px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer;">
+            📷 Upload Photo
+            <input type="file" id="profileImageInput" accept="image/*" style="display: none;">
+          </label>
+          <button type="button" class="widget-action-btn" id="removeAvatarBtn" style="flex: 1; height: 32px; font-size: 11px; justify-content: center;">
+            Remove Photo
+          </button>
+        </div>
+      </div>
+
+      <div style="border-top: 1px solid var(--border); margin: 14px 0 10px 0; padding-top: 10px;">
+        <span style="font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--error); display: block; margin-bottom: 6px;">Danger Zone</span>
+        <button type="button" class="btn-danger" id="deleteAccountBtn" style="width: 100%; height: 34px; font-size: 12px; background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;">
+          🗑️ Delete Account
+        </button>
+      </div>
+    </div>
+
+    <!-- Fixed Centered Add New Task Modal Overlay -->
+    <div class="kanban-task-modal-overlay" id="kanbanTaskModalOverlay" role="dialog" aria-labelledby="globalTaskModalTitle">
+      <div class="kanban-task-modal-card">
+        <div class="popover-header" style="display: flex; justify-content: space-between; align-items: center;">
+          <h3 class="popover-title" id="globalTaskModalTitle">Add New Task</h3>
+          <button type="button" class="icon-btn-ghost" id="closeGlobalTaskModalBtn" style="width: 28px; height: 28px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+
+        <form id="globalTaskModalForm" style="display: flex; flex-direction: column; gap: 12px; margin-top: 12px;">
+          <div>
+            <label style="font-size: 11px; font-weight: 600; color: var(--text-secondary); display: block; margin-bottom: 4px;">Task Title</label>
+            <input type="text" id="globalTaskTitleInput" placeholder="What needs to be done?" class="form-input" style="height: 38px; width: 100%;" autocomplete="off" required>
+          </div>
+
+          <div style="display: flex; gap: 10px;">
+            <div style="flex: 1;">
+              <label style="font-size: 11px; font-weight: 600; color: var(--text-secondary); display: block; margin-bottom: 4px;">Priority</label>
+              <select id="globalTaskPrioritySelect" class="form-select" style="height: 38px; width: 100%;">
+                <option value="medium" selected>🟡 Medium</option>
+                <option value="high">🔴 High</option>
+                <option value="low">🟢 Low</option>
+              </select>
+            </div>
+
+            <div style="flex: 1;">
+              <label style="font-size: 11px; font-weight: 600; color: var(--text-secondary); display: block; margin-bottom: 4px;">Column</label>
+              <select id="globalTaskColumnSelect" class="form-select" style="height: 38px; width: 100%;">
+                <option value="todo" selected>To Do</option>
+                <option value="in-progress">In Progress</option>
+                <option value="done">Done</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px;">
+            <button type="button" id="cancelGlobalTaskModalBtn" class="widget-action-btn" style="height: 36px; padding: 0 16px; font-size: 12px;">Cancel</button>
+            <button type="submit" class="snip-submit-btn" style="height: 36px; padding: 0 20px; font-size: 13px;">➕ Add Task</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div><!-- /dashboard-container -->
+
+  <!-- Application Main Entry Script (ES6 Module) -->
+  <script type="module" src="js/main-dashboard.js?v=1.0.4"></script>
+</body>
+</html>
